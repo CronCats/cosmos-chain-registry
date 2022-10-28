@@ -1,3 +1,17 @@
+///
+/// A Rust API for getting chain information from the [Cosmos Chain Registry](https://github.com/cosmos/chain-registry).
+///
+/// ## Example
+///
+/// ```rust
+/// let registry = ChainRegistry::from_remote().unwrap();
+/// let info = registry.get_by_chain_id("juno-1").unwrap();
+///
+/// assert_eq!(info.chain_name, "juno");
+/// assert_eq!(info.chain_id, "juno-1");
+/// assert_eq!(info.pretty_name, "Juno");
+/// ```
+///
 pub use chain::ChainInfo;
 use lazy_static::lazy_static;
 use std::path::PathBuf;
