@@ -1,9 +1,13 @@
 [package]
 name = "cosmos-chain-registry"
+description = "A crate for retrieving chain data from the Cosmos chain registry repo."
+authors = ["Zack Kollar"]
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+license = "AGPLv3"
+documentation = "https://docs.rs/cosmos-chain-registry/latest/cosmos-chain-registry/"
+repository = "https://github.com/CronCats/cosmos-chain-registry"
+readme = "README.md"
 
 [dependencies]
 git2 = "0.15.0"

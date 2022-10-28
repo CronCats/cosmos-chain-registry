@@ -1,7 +1,8 @@
-/// Contains models for serializing and deserializing the `chain.json` in a given chain's directory in the registry repository
-/// Taken from [here](https://github.com/PeggyJV/chain-registry/blob/main/src/chain.rs).
+//! Contains models for serializing and deserializing the `chain.json` in a given chain's directory in the registry repository
+//! Taken from [here](https://github.com/PeggyJV/chain-registry/blob/main/src/chain.rs).
 use serde::{Deserialize, Serialize};
 
+/// Information about a Cosmos SDK chain.
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 // by denying unknown fields we can be more confident that our structs match the
 // current configured GIT_REF's schema. errors will occur if the chain.json is

@@ -1,17 +1,17 @@
-///
-/// A Rust API for getting chain information from the [Cosmos Chain Registry](https://github.com/cosmos/chain-registry).
-///
-/// ## Example
-///
-/// ```rust
-/// let registry = ChainRegistry::from_remote().unwrap();
-/// let info = registry.get_by_chain_id("juno-1").unwrap();
-///
-/// assert_eq!(info.chain_name, "juno");
-/// assert_eq!(info.chain_id, "juno-1");
-/// assert_eq!(info.pretty_name, "Juno");
-/// ```
-///
+//!
+//! A Rust API for getting chain information from the [Cosmos Chain Registry](https://github.com/cosmos/chain-registry).
+//!
+//! ## Example
+//!
+//! ```rust
+//! let registry = ChainRegistry::from_remote().unwrap();
+//! let info = registry.get_by_chain_id("juno-1").unwrap();
+//!
+//! assert_eq!(info.chain_name, "juno");
+//! assert_eq!(info.chain_id, "juno-1");
+//! assert_eq!(info.pretty_name, "Juno");
+//! ```
+//!
 pub use chain::ChainInfo;
 use lazy_static::lazy_static;
 use std::path::PathBuf;
@@ -35,14 +35,14 @@ lazy_static! {
 }
 
 /// The `ChainRegistry` struct is used to fetch and parse chain information from the
-/// [chain-registry](https://github.com/cosmos/chain-registry).
+/// [Cosmos Chain Registry](https://github.com/cosmos/chain-registry).
 pub struct ChainRegistry {
     path: PathBuf,
 }
 
 impl ChainRegistry {
     /// Creates a new `ChainRegistry` instance. The `path` argument is the path to the
-    /// local clone of the [chain-registry](https://github.com/cosmos/chain-registry).
+    /// local clone of the [Cosmos Chain Registry](https://github.com/cosmos/chain-registry).
     pub fn from_remote() -> Result<Self, Error> {
         // Store the chain registry in a temporary directory
         let repo_path = PathBuf::from(std::env::temp_dir()).join("chain-registry");
