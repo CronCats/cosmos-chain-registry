@@ -15,7 +15,7 @@
 pub use chain::ChainInfo;
 use lazy_static::lazy_static;
 use std::path::PathBuf;
-use tracing::info;
+use tracing::trace;
 
 mod chain;
 
@@ -46,7 +46,7 @@ impl ChainRegistry {
     pub fn from_remote() -> Result<Self, Error> {
         // Store the chain registry in a temporary directory
         let repo_path = PathBuf::from(std::env::temp_dir()).join("chain-registry");
-        info!(
+        trace!(
             "Cloning chain registry from {} to {}",
             GITHUB_CHAIN_REGISTRY_URL.as_str(),
             repo_path.display()
@@ -57,7 +57,7 @@ impl ChainRegistry {
             Err(e) => match e.code() {
                 // If the repo already exists, pull the latest changes
                 git2::ErrorCode::Exists => {
-                    info!("Chain registry already exists, pulling latest changes");
+                    trace!("Chain registry already exists, pulling latest changes");
                     let repo = git2::Repository::open(&repo_path)?;
                     let mut remote = repo.find_remote("origin")?;
                     remote.fetch(&[GITHUB_CHAIN_REGISTRY_REF.as_str()], None, None)?;
