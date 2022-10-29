@@ -83,7 +83,6 @@ impl ChainRegistry {
             let chain_info: ChainInfo = serde_json::from_reader(std::fs::File::open(file)?)?;
 
             if chain_info.chain_id == chain_id {
-                println!("{:#?}", chain_info);
                 return Ok(chain_info);
             }
         }
