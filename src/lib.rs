@@ -4,6 +4,8 @@
 //! ## Example
 //!
 //! ```rust
+//! use cosmos_chain_registry::ChainRegistry;
+//!
 //! let registry = ChainRegistry::from_remote().unwrap();
 //! let info = registry.get_by_chain_id("juno-1").unwrap();
 //!
@@ -113,5 +115,12 @@ mod tests {
         assert_eq!(info.chain_name, "juno");
         assert_eq!(info.chain_id, "juno-1");
         assert_eq!(info.pretty_name, "Juno");
+
+        let registry = ChainRegistry::from_remote().unwrap();
+        let info = registry.get_by_chain_id("uni-5").unwrap();
+
+        assert_eq!(info.chain_name, "junotestnet");
+        assert_eq!(info.chain_id, "uni-5");
+        assert_eq!(info.pretty_name, "Juno Testnet");
     }
 }
