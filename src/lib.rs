@@ -15,6 +15,7 @@
 //! ```
 //!
 pub use chain::ChainInfo;
+use git2::FetchOptions;
 use lazy_static::lazy_static;
 use std::path::PathBuf;
 use tracing::trace;
@@ -33,7 +34,7 @@ lazy_static! {
     /// The git ref to checkout. This is the default ref, but can be overridden by setting the
     /// `CHAIN_REGISTRY_REF` environment variable.
     pub static ref GITHUB_CHAIN_REGISTRY_REF: String =
-        std::env::var("GITHUB_CHAIN_REGISTRY_REF").unwrap_or_else(|_| { "main".to_string() });
+        std::env::var("GITHUB_CHAIN_REGISTRY_REF").unwrap_or_else(|_| { "master".to_string() });
 }
 
 /// The `ChainRegistry` struct is used to fetch and parse chain information from the
@@ -60,9 +61,22 @@ impl ChainRegistry {
                 // If the repo already exists, pull the latest changes
                 git2::ErrorCode::Exists => {
                     trace!("Chain registry already exists, pulling latest changes");
+                    // Get the repo
                     let repo = git2::Repository::open(&repo_path)?;
+                    // Get the remote
                     let mut remote = repo.find_remote("origin")?;
-                    remote.fetch(&[GITHUB_CHAIN_REGISTRY_REF.as_str()], None, None)?;
+
+                    // Fetch the latest changes
+                    let mut fo = FetchOptions::new();
+                    remote.fetch(&[GITHUB_CHAIN_REGISTRY_REF.as_str()], Some(&mut fo), None)?;
+
+                    // Checkout the latest changes
+                    let (object, reference) = repo.revparse_ext(&GITHUB_CHAIN_REGISTRY_REF)?;
+                    repo.checkout_tree(&object, None)?;
+                    match reference {
+                        Some(gref) => repo.set_head(gref.name().unwrap()),
+                        None => repo.set_head_detached(object.id()),
+                    }?;
                 }
                 _ => return Err(e.into()),
             },
