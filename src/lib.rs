@@ -18,7 +18,7 @@ pub use chain::ChainInfo;
 use git2::FetchOptions;
 use lazy_static::lazy_static;
 use std::path::PathBuf;
-use tracing::trace;
+use tracing::debug;
 
 mod chain;
 
@@ -47,9 +47,10 @@ impl ChainRegistry {
     /// Creates a new `ChainRegistry` instance. The `path` argument is the path to the
     /// local clone of the [Cosmos Chain Registry](https://github.com/cosmos/chain-registry).
     pub fn from_remote() -> Result<Self, Error> {
-        // Store the chain registry in a temporary directory
-        let repo_path = PathBuf::from(std::env::temp_dir()).join("chain-registry");
-        trace!(
+        // Store the chain registry in a local hidden directory
+        let pwd = std::env::current_dir()?;
+        let repo_path = pwd.join(".cosmos-chain-registry");
+        debug!(
             "Cloning chain registry from {} to {}",
             GITHUB_CHAIN_REGISTRY_URL.as_str(),
             repo_path.display()
@@ -60,7 +61,7 @@ impl ChainRegistry {
             Err(e) => match e.code() {
                 // If the repo already exists, pull the latest changes
                 git2::ErrorCode::Exists => {
-                    trace!("Chain registry already exists, pulling latest changes");
+                    debug!("Chain registry already exists, pulling latest changes");
                     // Get the repo
                     let repo = git2::Repository::open(&repo_path)?;
                     // Get the remote
