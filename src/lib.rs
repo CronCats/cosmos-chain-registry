@@ -18,7 +18,7 @@ pub use chain::ChainInfo;
 use git2::FetchOptions;
 use lazy_static::lazy_static;
 use std::path::PathBuf;
-use tracing::debug;
+use tracing::{debug, info};
 
 mod chain;
 
@@ -50,7 +50,7 @@ impl ChainRegistry {
         // Store the chain registry in a local hidden directory
         let pwd = std::env::current_dir()?;
         let repo_path = pwd.join(".cosmos-chain-registry");
-        debug!(
+        info!(
             "Cloning chain registry from {} to {}",
             GITHUB_CHAIN_REGISTRY_URL.as_str(),
             repo_path.display()
