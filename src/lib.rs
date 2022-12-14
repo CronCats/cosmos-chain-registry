@@ -50,11 +50,14 @@ impl ChainRegistry {
         // Store the chain registry in a local hidden directory
         let pwd = std::env::current_dir()?;
         let repo_path = pwd.join(".cosmos-chain-registry");
-        info!(
-            "Cloning chain registry from {} to {}",
-            GITHUB_CHAIN_REGISTRY_URL.as_str(),
-            repo_path.display()
-        );
+
+        if !repo_path.exists() {
+            info!(
+                "Cloning chain registry from {} to {}",
+                GITHUB_CHAIN_REGISTRY_URL.as_str(),
+                repo_path.display()
+            );
+        }
 
         // Try to clone the repo
         match git2::Repository::clone(GITHUB_CHAIN_REGISTRY_URL.as_str(), &repo_path) {
