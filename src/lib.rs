@@ -20,7 +20,7 @@ use lazy_static::lazy_static;
 use std::path::PathBuf;
 use tracing::{debug, info};
 
-mod chain;
+pub mod chain;
 
 /// Generic error type for this crate
 pub type Error = Box<dyn std::error::Error>;
