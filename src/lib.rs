@@ -100,10 +100,10 @@ impl ChainRegistry {
     pub fn get_by_chain_id(&self, chain_id: &str) -> Result<ChainInfo, Error> {
         for file in glob::glob(&self.path.join("**/chain.json").to_string_lossy())? {
             let file = file?;
-            let chain_res: Result<ChainInfo, serde_json::Error> = serde_json::from_reader(std::fs::File::open(file)?);
+            let chain_res: Result<ChainInfo, serde_json::Error> =
+                serde_json::from_reader(std::fs::File::open(file)?);
 
-            if chain_res.is_ok() {
-                let chain_info = chain_res.unwrap();
+            if let Ok(chain_info) = chain_res {
                 if chain_info.chain_id == chain_id {
                     return Ok(chain_info);
                 }
