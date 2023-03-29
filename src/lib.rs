@@ -100,10 +100,13 @@ impl ChainRegistry {
     pub fn get_by_chain_id(&self, chain_id: &str) -> Result<ChainInfo, Error> {
         for file in glob::glob(&self.path.join("**/chain.json").to_string_lossy())? {
             let file = file?;
-            let chain_info: ChainInfo = serde_json::from_reader(std::fs::File::open(file)?)?;
+            let chain_res: Result<ChainInfo, serde_json::Error> = serde_json::from_reader(std::fs::File::open(file)?);
 
-            if chain_info.chain_id == chain_id {
-                return Ok(chain_info);
+            if chain_res.is_ok() {
+                let chain_info = chain_res.unwrap();
+                if chain_info.chain_id == chain_id {
+                    return Ok(chain_info);
+                }
             }
         }
 
@@ -135,10 +138,10 @@ mod tests {
         assert_eq!(info.pretty_name, "Juno");
 
         let registry = ChainRegistry::from_remote().unwrap();
-        let info = registry.get_by_chain_id("uni-5").unwrap();
+        let info = registry.get_by_chain_id("uni-6").unwrap();
 
         assert_eq!(info.chain_name, "junotestnet");
-        assert_eq!(info.chain_id, "uni-5");
+        assert_eq!(info.chain_id, "uni-6");
         assert_eq!(info.pretty_name, "Juno Testnet");
     }
 }
